@@ -1,6 +1,6 @@
 # Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was bootstrapped with [npx create-react-app goodboy_react --template typescript](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
