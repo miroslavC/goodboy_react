@@ -1,3 +1,24 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font-family: 'Roboto Condensed', sans-serif;
+	vertical-align: baseline;
+}
+
 .App {
   text-align: center;
 }
@@ -6,6 +27,7 @@
   height: 40vmin;
   pointer-events: none;
 }
+
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
@@ -57,12 +79,19 @@
 
 .title_info{
   color: #000000;
-  padding: 0;
-  margin: 0;
   text-align: left;
+
+  font-style: normal;
+  font-weight: bold;
+  font-size: 46px;
+  line-height: 52px;
+  letter-spacing: 0.01em;
+  color: #000000;
   /* line-height:4rem; */
-  font-family: 'Roboto Condensed', sans-serif;
+  /* font-family: 'Roboto Condensed', sans-serif; */
 }
+
+
 .page_body_wrapper{
   display: flex;
   flex-direction: row;
@@ -90,6 +119,205 @@
    -webkit-border-radius: 10px;
    border-radius: 25px;
 }
+
+/* ------ Asylum list wrapper ----- */
+.asylum_list_wrapper{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top:3em;
+  width:80%;
+  height: auto;
+  background-color: #ffffff;
+}
+
+.asylum_list_about{
+  order: 1;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 19px;
+  color: #2F2F2F;
+}
+
+.asylum_list_info{
+  flex-grow: 4; 
+  order: 1;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 19px;
+  text-align: right;
+  color: #818181;
+}
+
+.asylum_list_picker_wrapper{
+  margin-top: 0.5em;
+  order: 2;
+  width: 100%;
+  height: 3em;
+  background: #FFFFFF;
+  border: 1px solid #DFDFDF;
+  box-sizing: border-box;
+  border-radius: 8px;
+  padding-top: 0.5em;
+  padding-left: 1em;
+  cursor: pointer;
+} 
+.asylum_list_picker_title{
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 21px;
+  color: #2F2F2F;
+  text-align: left;
+}
+
+.asylum_list_picker_subtitle{
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 21px;
+  color: #9F9F9F;
+  text-align: left;
+}
+/* ------ Asylum list wrapper END ----- */
+
+/* ------ Option donate wrapper ----- */
+.option_donate_wrapper{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top:1.5em;
+  width:80%;
+  height: auto;
+  background-color: #ffffff;
+}
+
+.option_donate_title{
+  order: 1;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 19px;
+  color: #2F2F2F;
+}
+
+.option_donate_money_wrapper{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 0.5em;
+  order: 2;
+  width: 100%;
+  height: 3em;
+  background: #FFFFFF;
+  box-sizing: border-box;
+  padding-top: 0.5em;
+  padding-left: 1em;
+}
+
+.option_donate_money_box {
+  margin-right: 0.25em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 16px;
+
+  width: 2.5em;
+  height: 53px;
+  left: 251px;
+  top: 719px;
+
+  background: #FFFFFF;
+  border: 1px solid #DFDFDF;
+  box-sizing: border-box;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.option_donate_money_box_active {
+  margin-right: 0.25em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 16px;
+  width: 2.5em;
+  height: 53px;
+  left: 251px;
+  top: 719px;
+
+  background: linear-gradient(115.41deg, #CD8A64 -1.77%, #C4794F 73.03%);
+  border-radius: 8px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.option_donate_money_box_value{
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 21px;
+  color: #2F2F2F;
+}
+.option_donate_money_box_value_active{
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 21px;
+  color: #ffffff;
+}
+/* ------ Option donate wrapper END ----- */
+
+/* ------ Active info Action ----- */
+.active_info_action_wrapper{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top:1.5em;
+  width:80%;
+  height: auto;
+  background-color: #FFFFFF;
+}
+
+.button_info_normal{
+  flex-grow: 0;
+  align-items: center;
+  padding: 20px 24px;
+
+  width: 81px;
+  height: 59px;
+  right: 1109px;
+  top: 764px;
+  background: #F3E2D9;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+}
+.empty_space{
+  flex-grow: 1;
+}
+.button_info_active{
+  flex-grow: 0;
+  padding: 20px 24px;
+  color: #FFFFFF;
+
+  width: 124px;
+  height: 59px;
+  left: 682px;
+  top: 844px;
+  
+  background: linear-gradient(115.41deg, #CD8A64 -1.77%, #C4794F 73.03%);
+  box-shadow: 0px 100px 80px rgba(0, 0, 0, 0.07), 0px 41.7776px 33.4221px rgba(0, 0, 0, 0.0503198), 0px 22.3363px 17.869px rgba(0, 0, 0, 0.0417275), 0px 12.5216px 10.0172px rgba(0, 0, 0, 0.035), 0px 6.6501px 5.32008px rgba(0, 0, 0, 0.0282725), 0px 2.76726px 2.21381px rgba(0, 0, 0, 0.0196802);
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+
+  justify-content:right;
+}
+
+/* ------ Active info Action END ----- */
+
 
 .donation_toggle_normal {
   width: 50%;
