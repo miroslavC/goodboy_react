@@ -1,11 +1,16 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+
 import HelpOptionToggle from "./active_info_components/HelpOptionToggle"
-import DogAsylumList from "./active_info_components/DogAsylumList"
+import DogAsylumListPicker from "./active_info_components/DogAsylumListPicker"
 import MoneyOptionDonate from "./active_info_components/MoneyOptionDonate"
 import ActiveInfoAction from "./active_info_components/ActiveInfoAction"
+import { AppState } from '../store/AppState';
+import UserDisplay  from '../components/UserDisplay';
 
 
 function PageActiveInfoSection() {
+  
 
     useEffect(() => {
         console.log("PageActiveInfoSection Init")
@@ -17,9 +22,11 @@ function PageActiveInfoSection() {
 
                 {/* option toggle component (for dog asylum all/concrete)*/}
                 <HelpOptionToggle/>
+
+                <UserDisplay/>
               
                 {/* list of dog asylum component*/}
-                <DogAsylumList/>
+                <DogAsylumListPicker/>
 
                 {/* money donate component */}
                 <MoneyOptionDonate/>
@@ -28,7 +35,7 @@ function PageActiveInfoSection() {
                 <ActiveInfoAction/>
 
             </div>
-        </>
+            </>
     );
 }
 

@@ -1,10 +1,17 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { isFunctionLike } from 'typescript';
 import DonateMoneyBox from "./DonateMoneyBox"
+import DonateMoneyBoxCustom from "./DonateMoneyBoxCustom"
+import { useDispatch } from 'react-redux';
+import { DonateType } from '../../store/UserReducer';
+import DispatcherManager from '../../store/DispatcherManager';
+
 
 function MoneyOptionDonate() {
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const [currentIndex, setCurrentIndex] = useState(-1);
     const [donateSum, setDonateSum] = useState(0);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         console.log("MoneyOptionDonate Init")
@@ -21,7 +28,7 @@ function MoneyOptionDonate() {
                    <DonateMoneyBox index={3} isActive={currentIndex == 3} moneySum={30} onChange={() => moneyBoxActiveAction(3)}/>
                    <DonateMoneyBox index={4} isActive={currentIndex == 4} moneySum={50} onChange={() => moneyBoxActiveAction(4)}/>
                    <DonateMoneyBox index={5} isActive={currentIndex == 5} moneySum={100} onChange={() => moneyBoxActiveAction(5)}/>
-                   <DonateMoneyBox index={6} isActive={currentIndex == 6} moneySum={0} onChange={() => moneyBoxActiveAction(6)}/>
+                   <DonateMoneyBoxCustom index={6} isActive={currentIndex == 6} moneySum={0} onChange={() => moneyBoxActiveAction(6)}/>
                 </div>
             </div>
 
@@ -35,6 +42,7 @@ function MoneyOptionDonate() {
                     console.log("List item 0 clicked")
                     setCurrentIndex(index)
                     setDonateSum(5)
+                    DispatcherManager.getInstance().dispatchShelterDonateSum(dispatch, 5);
                 }
 
                 break;
@@ -44,6 +52,7 @@ function MoneyOptionDonate() {
                     console.log("List item 1 clicked")
                     setCurrentIndex(index)
                     setDonateSum(10)
+                    DispatcherManager.getInstance().dispatchShelterDonateSum(dispatch, 10);
                 }
                 break;
             }
@@ -52,6 +61,7 @@ function MoneyOptionDonate() {
                     console.log("List item 2 clicked")
                     setCurrentIndex(index)
                     setDonateSum(20)
+                    DispatcherManager.getInstance().dispatchShelterDonateSum(dispatch, 20);
                 }
                 break;
             }
@@ -60,6 +70,7 @@ function MoneyOptionDonate() {
                     console.log("List item 3 clicked")
                     setCurrentIndex(index)
                     setDonateSum(30)
+                    DispatcherManager.getInstance().dispatchShelterDonateSum(dispatch, 30);
                 }
                 break;
             }
@@ -68,6 +79,7 @@ function MoneyOptionDonate() {
                     console.log("List item 4 clicked")
                     setCurrentIndex(index)
                     setDonateSum(50)
+                    DispatcherManager.getInstance().dispatchShelterDonateSum(dispatch, 50);
                 }
                 break;
             }
@@ -76,6 +88,7 @@ function MoneyOptionDonate() {
                     console.log("List item 5 clicked")
                     setCurrentIndex(index)
                     setDonateSum(100)
+                    DispatcherManager.getInstance().dispatchShelterDonateSum(dispatch, 100);
                 }
                 break;
             }

@@ -1,6 +1,18 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { DonateType } from '../../store/UserReducer';
+import DispatcherManager from '../../store/DispatcherManager';
+import { AppState } from '../../store/AppState';
 
-function DogAsylumList() {
+interface ShelterPickerProps {
+    closeAction(): void;
+}
+
+function DogAsylumList(props: ShelterPickerProps) {
+    const dispatch = useDispatch();
+    const user = useSelector((state: AppState) => state.user);
+
+    var shelterList = [{"id": 1, "name": "Útulok pre psov - TEZAS"},{"id": 2, "name": "OZ Tuláčik Brezno"}]
 
     useEffect(() => {
         console.log("DogAsylumList Init")
@@ -8,17 +20,21 @@ function DogAsylumList() {
 
     return (
         <>
-            <div className="asylum_list_wrapper">
-              <p className="asylum_list_about">O projekte</p>
-              <p className="asylum_list_info">Nepovinné</p>
-              <div className="asylum_list_picker_wrapper">
-                <p className="asylum_list_picker_title">Útulok</p>
-                <p className="asylum_list_picker_subtitle">Vyberte útulok zo zoznamu</p>
-              </div>
+            <div className="shelter_list_wrapper">
+                {shelterList.map(shelter => <li className="shelter_item" key={shelter.id} onClick={() => shelterItemClicked(shelter.id, shelter.name)}>
+                    <a className="shelter_item_row">{shelter.name}</a>
+                </li>)}
             </div>
           
         </>
     );
+
+    function shelterItemClicked(index: number, title: string) {
+        DispatcherManager.getInstance().dispatchShelterTitle(dispatch, index, title)
+
+        // --- hide shelter picker ---
+        props.closeAction();
+    }
 }
 
 
