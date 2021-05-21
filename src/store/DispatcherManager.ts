@@ -2,6 +2,7 @@ import { createStore } from "redux";
 import { rootReducer } from "./AppState";
 import { useDispatch } from 'react-redux';
 import { USER_TYPE, User, DonateType } from '../store/UserReducer';
+import { FORM_ACTION_TYPE, Form, ActionType } from './FormActionReducer';
 import { Dispatch } from "react";
 
 
@@ -55,5 +56,16 @@ export default class DispatcherManager {
             }
         });
     }
+
+    // --- Form Dispatch Action ---
+    dispatchFormAction(dispatcher: Dispatch<any>, actionType: ActionType): void {
+        dispatcher({
+            type: FORM_ACTION_TYPE,
+            payload: {
+                action_type: actionType
+            }
+        })
+    }
+
 }
 

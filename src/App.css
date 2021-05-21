@@ -104,7 +104,7 @@ time, mark, audio, video {
   background-color: #d2fad1;
   order: 1;
   padding:3em;
-  width: 60%;
+  width: 50%;
 }
 
 .donation_toggle_wrapper {
@@ -182,7 +182,6 @@ time, mark, audio, video {
   text-align: left;
 }
 /* ------ Asylum list wrapper END ----- */
-
 .shelter_list_wrapper{
    position:absolute;
    width: 30%;
@@ -336,6 +335,85 @@ time, mark, audio, video {
 }
 /* ------ Option donate wrapper END ----- */
 
+/* ------ Form wrapper  ----- */
+.form_wrapper{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top:2em;
+  width:100%;
+  height: auto;
+  background-color: #ffffff;
+}
+
+.form_wrapper_child{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width:100%;
+  height: auto;
+  background-color: #ffffff;
+}
+
+.form_input_wrapper{
+  margin-top: 0.5em;
+  order: 2;
+  width: 100%;
+  height: auto;
+  background: #FFFFFF;
+  border: 1px solid #DFDFDF;
+  box-sizing: border-box;
+  border-radius: 8px;
+  padding-top: 0.5em;
+  padding-left: 1em;
+  padding-bottom: 0.5em;
+}
+.info_title{
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 21px;
+  color: #2F2F2F;
+  text-align: left;
+}
+.form_title{
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 21px;
+  color: #2F2F2F;
+  text-align: left;
+}
+
+.form_edit{
+  width: 80%;
+  float: left;
+}
+
+.form_error {
+  position: absolute;
+  margin-top:1.8em;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 12px;
+  text-align: left;
+  color: red;
+}
+
+input[type=text], input[type=email], input[type=tel]{
+  padding-top: 0.2em;
+  padding-bottom: 0.5em;
+  border:0;
+}
+
+input, textarea {
+  font-family:inherit;
+  font-size: 0.8rem;
+}
+
+
+/* ------ Form wrapper END ----- */
+
 /* ------ Active info Action ----- */
 .active_info_action_wrapper{
   display: flex;
@@ -344,7 +422,7 @@ time, mark, audio, video {
   margin-top:1.5em;
   width:80%;
   height: auto;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
 }
 
 .button_info_normal{
