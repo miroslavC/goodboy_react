@@ -181,6 +181,9 @@ time, mark, audio, video {
   color: #9F9F9F;
   text-align: left;
 }
+.hideElement{
+  display: none;
+}
 /* ------ Asylum list wrapper END ----- */
 .shelter_list_wrapper{
    position:absolute;
@@ -340,7 +343,7 @@ time, mark, audio, video {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  margin-top:2em;
+  margin-top:1em;
   width:100%;
   height: auto;
   background-color: #ffffff;
@@ -385,6 +388,79 @@ time, mark, audio, video {
   text-align: left;
 }
 
+.form_subtitle{
+  margin-top: 0.5em;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 21px;
+  color: #2F2F2F;
+  text-align: left;
+}
+.check_info_wrapper{
+  margin-top: 0.5em;
+  order: 2;
+  width: 100%;
+  height: auto;
+  background: #ffffff;
+  box-sizing: border-box;
+  border-radius: 8px;
+  padding-bottom: 0.5em;
+}
+.checkbox_input_wrapper{
+  display: flex;
+  flex-direction: row;
+  order: 2;
+  width: 100%;
+  height: auto;
+  background: #ffffff;
+  box-sizing: border-box;
+  border-radius: 8px;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+.check_info_title{
+  font-style: normal;
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 21px;
+  color: #2F2F2F;
+  text-align: left;
+}
+.check_info_subtitle{
+  margin-top: 0.35em;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 21px;
+  color: #2F2F2F;
+  text-align: left;
+}
+.check_form_title{
+  order: 1;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 21px;
+  color: #2F2F2F;
+  text-align: left;
+}
+.check_form_subtitle{
+  order: 1;
+  margin-top: 0.35em;
+  margin-left: 0.3em;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 21px;
+  color: #2F2F2F;
+  text-align: left;
+}
+.checkbox_edit{
+  width: 2em;
+  height: 2em;
+
+}
 .form_edit{
   width: 80%;
   float: left;

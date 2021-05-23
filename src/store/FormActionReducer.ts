@@ -1,12 +1,13 @@
 export const FORM_ACTION_TYPE = "FORM_ACTION_TYPE";
 
 export enum ActionType {
-    ACTION_BACK = "BACK", ACTION_NEXT = "NEXT", ACTION_SUBMIT = "SUBMIT"
+    ACTION_BACK = "BACK", ACTION_VALIDATE = "VALIDATE", ACTION_NEXT = "NEXT", ACTION_SUBMIT = "SUBMIT"
 }
 
 export interface Form {
     actionFired: boolean;
     action_type: ActionType;
+    form_step: number;
 }
 
 export interface FormAction {

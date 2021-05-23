@@ -1,15 +1,18 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AppState } from '../../store/AppState';
-import { useSelector } from 'react-redux';
 import { ActionType} from '../../store/FormActionReducer';
+import { useDispatch, useSelector } from 'react-redux';
+import DispatcherManager from '../../store/DispatcherManager';
 import ValidationHelper, {InputType} from '../../util/ValidationHelper';
+
 
 interface UserFormProps {
    // TODO
 }
 
 type FormValues = {
+   
     firstName: string,
     lastName: string,
     email: string,
@@ -30,19 +33,29 @@ function UserForm(props: UserFormProps) {
     const [phoneNumberError, setPhoneNumberError] = useState(false);
 
     const formAction = useSelector((state: AppState) => state.form_action);
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        switch(formAction?.action_type) { 
-            case ActionType.ACTION_NEXT: { 
-                actionNextWithValidFromInput();
-               break; 
-            } 
-           
-            default: { 
-               break; 
-            } 
-         } 
-
+        if(formAction){
+            switch (formAction.action_type) { // which setp is present 
+                case ActionType.ACTION_NEXT: 
+                    console.log("BBBBBB UserForm ACTION_NEXT")
+                    break;
+    
+                case ActionType.ACTION_VALIDATE:
+                    console.log("BBBBBB UserForm ACTION_VALIDATE")
+                   // actionNextWithValidFromInput(formAction.form_step);
+                    break;
+    
+                case ActionType.ACTION_BACK:
+                    break;
+    
+                default:
+                    break;
+    
+            }
+        }
+        
     }, [formAction]);
 
     const onChangeFirstName = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,14 +121,19 @@ function UserForm(props: UserFormProps) {
         </>
     );
 
-    function actionNextWithValidFromInput() {
+    function actionNextWithValidFromInput(stepNumber: number) {
         if (!ValidationHelper.getInstance().validateUserInput(userFirstName, InputType.NAME, validateUserFirstName)
             || !ValidationHelper.getInstance().validateUserInput(userLastName, InputType.NAME, validateUserLastName)
             || !ValidationHelper.getInstance().validateUserInput(email, InputType.EMAIL, validateUserMail)
             || !ValidationHelper.getInstance().validateUserInput(phoneNumber, InputType.PHONE_NUMBER, validatePhoneNumber)) {
+
             console.log("Stop formular obsahuje chybu")
+
         } else {
             console.log("OK can dispatch data")
+
+            // --- User data is OK than goto Next Step ---
+            DispatcherManager.getInstance().dispatchFormAction(dispatch, ActionType.ACTION_NEXT, stepNumber);
         }
     }
 

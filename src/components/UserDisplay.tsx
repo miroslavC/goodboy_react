@@ -11,7 +11,7 @@ function UserDisplay () {
 
             <div>
                 <label>username:</label>
-                  {user.shelter.donate_sum}
+                  {user.donate_sum}
             </div>
             <div>
                 <label>email:</label>
@@ -19,7 +19,7 @@ function UserDisplay () {
             </div>
             <div>
                 <label>Donote type:</label>
-                {user.shelter.donate_type}
+                {user.donate_type}
             </div>
         </React.Fragment>);
     } else {

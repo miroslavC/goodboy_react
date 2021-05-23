@@ -1,9 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector} from 'react-redux';
 import { DonateType } from '../../store/UserReducer';
 import DispatcherManager from '../../store/DispatcherManager';
+import { AppState } from '../../store/AppState';
 
 interface MoneyPickerProps {
+    setSumOfMoney(sum: number): void
     closePicker(): void;
 }
 
@@ -11,40 +13,21 @@ function MoneyPickerInput(props: MoneyPickerProps) {
     const [moneySum, setMoneySum] = useState(0);
     const dispatch = useDispatch();
 
+    const user = useSelector((state: AppState) => state.user);
+
     useEffect(() => {
         console.log("MoneyPickerInput Init")
      }, []);
 
-     const handleEnterPress = (e: React.KeyboardEvent<HTMLInputElement>) =>{
-        if( e.key == 'Enter' ){
-            DispatcherManager.getInstance().dispatchShelterDonateSum(dispatch, moneySum);
+    const handleEnterPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key == 'Enter') {
+            props.setSumOfMoney(moneySum)
             props.closePicker()
         }
-      };
+    };
      const onChangeMoneySum = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const sumFromInput = e.target.value ? Number(e.target.value) : 0;
-        console.log("userid", sumFromInput);
         setMoneySum(sumFromInput)
-       // setUserid(useridFromInput);
-    
-     //   const usersResponse = await fetch('https://jsonplaceholder.typicode.com/users');
-       // if(usersResponse.ok) {
-        //  const users = await usersResponse.json();
-          
-        //   const usr = users.find((userItem: any) => {
-        //     return userItem && userItem.id === useridFromInput;
-        //   });
-          
-        //   dispatch({
-        //     type: USER_TYPE,
-        //     payload: {
-        //       id: usr.id,
-        //       username: usr.username,
-        //       email: usr.email,
-        //       city: usr.address.city
-        //     }
-        //   });
-      //  }
       }
 
     return (

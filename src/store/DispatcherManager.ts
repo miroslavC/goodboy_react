@@ -1,7 +1,7 @@
 import { createStore } from "redux";
 import { rootReducer } from "./AppState";
 import { useDispatch } from 'react-redux';
-import { USER_TYPE, User, DonateType } from '../store/UserReducer';
+import { USER_TYPE, User, Shelter, DonateType} from '../store/UserReducer';
 import { FORM_ACTION_TYPE, Form, ActionType } from './FormActionReducer';
 import { Dispatch } from "react";
 
@@ -22,8 +22,28 @@ export default class DispatcherManager {
     /***********************************************************
      *        --- Dispatcher Actions ---
      * *********************************************************/
+     dispatchInitState(dispatcher: Dispatch<any>): void {
+        dispatcher({
+            type: FORM_ACTION_TYPE,
+            payload: {
+                form_step: 1
+            }
+        });
+    }
 
-    dispatchShelterDonateType(dispatcher: Dispatch<any>, donateType: DonateType): void {
+    dispatchUpdateShelterDonateType(dispatcher: Dispatch<any>, donateType: DonateType, user: User): void {
+        dispatcher({
+            type: USER_TYPE,
+            payload: {
+                shelter: {
+                    ...user.shelter,
+                    donate_type: donateType
+                }
+            }
+        });
+    }
+
+    dispatchSetShelterDonateType(dispatcher: Dispatch<any>, donateType: DonateType): void {
         dispatcher({
             type: USER_TYPE,
             payload: {
@@ -46,23 +66,55 @@ export default class DispatcherManager {
         });
     }
 
-    dispatchShelterDonateSum(dispatcher: Dispatch<any>, moneySum: number): void {
+    dispatchShelterDonateSum(dispatcher: Dispatch<any>, user: User, donateSum: number): void {
         dispatcher({
             type: USER_TYPE,
             payload: {
                 shelter: {
-                    donate_sum: moneySum
+                    ...user.shelter,
+                    donate_sum: donateSum
+                }
+            }
+        });
+    }
+
+    dispatchFinalShelterDonateInfo(dispatcher: Dispatch<any>, donateType: DonateType, shelter: Shelter, sumOfMoney: number): void {
+        dispatcher({
+            type: USER_TYPE,
+            payload: {
+               // ...user,
+                donate_type: donateType,
+                donate_sum: sumOfMoney,
+                shelter: {
+                   // ...user.shelter,
+                    id: shelter.id,
+                    name: shelter.name
                 }
             }
         });
     }
 
     // --- Form Dispatch Action ---
-    dispatchFormAction(dispatcher: Dispatch<any>, actionType: ActionType): void {
+    dispatchFormAction(dispatcher: Dispatch<any>, actionType: ActionType, actualStep: number): void {
+        let tempStep = 0;
+        switch (actionType) {
+            case ActionType.ACTION_BACK:
+                tempStep = actualStep - 1;
+                break;
+            case ActionType.ACTION_VALIDATE:
+                tempStep = actualStep;
+                break;
+            case ActionType.ACTION_NEXT:
+                tempStep = actualStep + 1;
+                break;
+            default: break;
+        }
+
         dispatcher({
             type: FORM_ACTION_TYPE,
             payload: {
-                action_type: actionType
+                action_type: actionType,
+                form_step:tempStep
             }
         })
     }

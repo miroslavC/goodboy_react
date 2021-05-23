@@ -1,73 +1,94 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-
 import HelpOptionToggle from "./active_info_components/HelpOptionToggle"
 import DogAsylumListPicker from "./active_info_components/DogAsylumListPicker"
 import MoneyOptionDonate from "./active_info_components/MoneyOptionDonate"
 import ActiveInfoAction from "./active_info_components/ActiveInfoAction"
 import UserForm from "./active_info_components/UserForm"
-import { ActionType} from '../store/FormActionReducer';
-import { useDispatch } from 'react-redux';
-
+import UserChceckFormInfo from "./active_info_components/UserChceckFormInfo"
+import ShelterDonateForm from "./active_info_components/ShelterDonateForm"
 import { AppState } from '../store/AppState';
-import UserDisplay  from '../components/UserDisplay';
+import { ActionType} from '../store/FormActionReducer';
+import { useDispatch, useSelector } from 'react-redux';
 import DispatcherManager from '../store/DispatcherManager';
 
 
 function PageActiveInfoSection() {
-    const [isActionBack, setActionBack] = useState(false);
-    const [isActionNext, setActionNext] = useState(false);
-    const [isActionSubmit, setActionSubmit] = useState(false);
+    const [formStepNumber, setFormStepNumber] = useState(0);
+    const [screenDonateIsActive, setScreenDonateActive] = useState(false);
+    const [screenUserFormIsActive, setScreenUserFormActive] = useState(false);
+    const [screenFormCheckIsActive, setScreenFormCheckActive] = useState(false);
 
+    const formAction = useSelector((state: AppState) => state.form_action);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        console.log("XXXXXX Init")
+     }, [screenDonateIsActive, screenUserFormIsActive, screenFormCheckIsActive]);
   
     useEffect(() => {
         console.log("PageActiveInfoSection Init")
-     }, []);
+        if (formAction) {
+            setFormStepNumber(formAction.form_step) // --- local state for step number
+        }    
+     }, [formAction]);
 
-    return (
-        <>
-            <div className="active_info_wrapper">
+    if(formAction){
+        return (
+            <>
+                <div className="active_info_wrapper">
 
-                <UserForm/>
-
-                {/* option toggle component (for dog asylum all/concrete)*/}
-                {/* <HelpOptionToggle/> */}
-
-                {/* <UserDisplay/> */}
-              
-                {/* list of dog asylum component*/}
-                {/* <DogAsylumListPicker/> */}
-
-                {/* money donate component */}
-                {/* <MoneyOptionDonate/> */}
-
-                {/* Actions Submit/Back */}
-                <ActiveInfoAction formActionBack={FormActionBack} formActionNext={FormActionNext} formActionSubmit={FormActionSubmit}/>
-
-            </div>
+                    {/* (STEP_1) donate for shelter with options */}
+                    {formAction.form_step == 1 && <ShelterDonateForm/>}
+    
+                    {/* (STEP_2) User info form input */}
+                    {formAction.form_step == 2 && <UserForm/>}
+    
+                    {/* (STEP_3) User info check with final confirm */}
+                    {formAction.form_step == 3 && <UserChceckFormInfo />}
+    
+                    {/* Actions Back/Next/Submit buttons in All screen */}
+                    <ActiveInfoAction formActionBack={FormActionBack} formActionNext={FormActionNext} formActionSubmit={FormActionSubmit} />
+    
+                </div>
             </>
-    );
-
+        );
+    } else {
+        return null; // TODO svg circle loading...?
+    }
+  
+    // --- Form Button Action method ---
     function FormActionBack(): void {
-        console.log("FormActionBack was clicked!!!");
-        setActionBack(true)
-        setActionNext(false)
-        setActionSubmit(false)
+        // --- Action Back ---
+        DispatcherManager.getInstance().dispatchFormAction(dispatch, ActionType.ACTION_BACK, formStepNumber);
     }
 
     function FormActionNext(): void {
-        console.log("FormActionNext was clicked!!!");
-     
-        // --- Action next ---
-        DispatcherManager.getInstance().dispatchFormAction(dispatch, ActionType.ACTION_NEXT);
+        switch (formStepNumber) { // which setp is present 
+            case 1: 
+                // --- dispatch STEP_1 ---
+                DispatcherManager.getInstance().dispatchFormAction(dispatch, ActionType.ACTION_VALIDATE, formStepNumber);
+                break;
+
+            case 2:
+                // --- dispatch STEP_2 ---
+                DispatcherManager.getInstance().dispatchFormAction(dispatch, ActionType.ACTION_VALIDATE, formStepNumber);
+                break;
+
+            case 3:
+                // --- dispatch STEP_3 ---
+                break;
+
+            default:
+                break;
+
+        }
     }
 
     function FormActionSubmit() : void{
         console.log("FormActionSubmit was clicked!!!");
-        setActionBack(false)
-        setActionNext(false)
-        setActionSubmit(true)
+
+         // --- Action Submit ---
+        DispatcherManager.getInstance().dispatchFormAction(dispatch, ActionType.ACTION_SUBMIT, formStepNumber);
     }
 }
 

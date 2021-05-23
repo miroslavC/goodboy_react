@@ -22,18 +22,6 @@ function ActiveInfoAction(props: ActiveInfoActionProps) {
 
         </>
     );
-
-    // function ButtonActionBack() {
-    //     console.log("ButtonActionBack was clicked!!!");
-    // }
-
-    // function ButtonActionNext() {
-    //     console.log("ButtonActionNext was clicked!!!");
-    // }
-
-    // function ButtonActionSubmit() {
-    //     console.log("ButtonActionSubmit was clicked!!!");
-    // }
 }
 
 
