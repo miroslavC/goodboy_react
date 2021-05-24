@@ -43,6 +43,36 @@ export default class DispatcherManager {
         });
     }
 
+    dispatchUpdateUser(dispatcher: Dispatch<any>, user: User, userId: number, firstName: string, lastName: string, userEmail: string, phone: string): void {
+        dispatcher({
+            type: USER_TYPE,
+            payload: {
+                ...user,
+                id: userId,
+                first_name: firstName,
+                last_name: lastName,
+                email: userEmail,
+                phone_number: phone,
+                shelter: {
+                    ...user.shelter
+                }
+            }
+        });
+    }
+
+    dispatchUpdateFinalConfirmUser(dispatcher: Dispatch<any>, user: User, confirmChecked: boolean): void {
+        dispatcher({
+            type: USER_TYPE,
+            payload: {
+                ...user,
+                confirm_is_checked: confirmChecked,
+                shelter: {
+                    ...user.shelter
+                }
+            }
+        });
+    }
+
     dispatchSetShelterDonateType(dispatcher: Dispatch<any>, donateType: DonateType): void {
         dispatcher({
             type: USER_TYPE,
@@ -78,15 +108,15 @@ export default class DispatcherManager {
         });
     }
 
-    dispatchFinalShelterDonateInfo(dispatcher: Dispatch<any>, donateType: DonateType, shelter: Shelter, sumOfMoney: number): void {
+    dispatchFinalShelterDonateInfo(dispatcher: Dispatch<any>, donateType: DonateType, user: User | null, shelter: Shelter, sumOfMoney: number): void {
         dispatcher({
             type: USER_TYPE,
             payload: {
-               // ...user,
+                ...user,
                 donate_type: donateType,
                 donate_sum: sumOfMoney,
                 shelter: {
-                   // ...user.shelter,
+                    ...user?.shelter,
                     id: shelter.id,
                     name: shelter.name
                 }
@@ -107,6 +137,9 @@ export default class DispatcherManager {
             case ActionType.ACTION_NEXT:
                 tempStep = actualStep + 1;
                 break;
+            case ActionType.ACTION_SUBMIT:
+                tempStep = actualStep;
+                break;
             default: break;
         }
 
@@ -114,7 +147,7 @@ export default class DispatcherManager {
             type: FORM_ACTION_TYPE,
             payload: {
                 action_type: actionType,
-                form_step:tempStep
+                form_step: tempStep
             }
         })
     }

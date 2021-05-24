@@ -17,40 +17,41 @@ function ShelterDonateForm(props: DonateProps) {
     const [isActionNext, setActionNext] = useState(false);
     const [isActionSubmit, setActionSubmit] = useState(false);
     const [moneySum, setMoneySum] = useState(0);
-    const [donateType, setDonateType] = useState(DonateType.DONATE_SINGLE);
+    const [donateType, setDonateType] = useState(DonateType.DONATE_DEFAULT);
     const [shelter, setShelter] = useState<Shelter>({id:0, name:""});  
 
-    const formAction = useSelector((state: AppState) => state.form_action);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [errorMoneyMessage, setErrorMoneyMessage] = useState("");
+
+    const FormAction = useSelector((state: AppState) => state.form_action);
     const dispatch = useDispatch();
-    const user = useSelector((state: AppState) => state.user);
+    const ActiveUser = useSelector((state: AppState) => state.user);
 
     useEffect(() => {
         console.log("ShelterDonateForm Init")
      }, []);
 
+     useEffect(() => {
+        if(ActiveUser){
+            setDonateType(ActiveUser.donate_type)
+            setShelter(ActiveUser.shelter)
+            setMoneySum(ActiveUser.donate_sum)
+        }
+    }, []);
+
     useEffect(() => {
-        if(formAction){
-            switch (formAction.action_type) { // which setp is present 
-                case ActionType.ACTION_NEXT: 
-                    console.log("AAAAA ShelterDonateForm ACTION_NEXT")
-                    break;
-    
+        if(FormAction && FormAction.form_step == 1){
+            switch (FormAction.action_type) { // which setp is present 
                 case ActionType.ACTION_VALIDATE:
-                    console.log("AAAAA ShelterDonateForm ACTION_VALIDATE")
                     validateFinalShelterDonateInput();
-                    break;
-    
-                case ActionType.ACTION_BACK:
-                    console.log("AAAAA ShelterDonateForm ACTION_BACK")
                     break;
     
                 default:
                     break;
-    
             }
         }
         
-    }, [formAction]);
+    }, [FormAction]);
   
     return (
         <>
@@ -62,22 +63,40 @@ function ShelterDonateForm(props: DonateProps) {
 
             {/* money donate component */}
             <MoneyOptionDonate setMoneyOptionData={setDataFromMoneyOptionDonate}/>
-            
+
+            {errorMessage != "" && <div className="error_donate_wrapper"><p className="error_donate">{errorMessage}</p></div>}
+            {errorMoneyMessage != "" && <div className="error_donate_wrapper"><p className="error_donate">{errorMoneyMessage}</p></div>}
+    
         </>
     );
 
-    function validateFinalShelterDonateInput() {
-        console.log("OK User data -> Dispatch Shelter donate data")
+    function validateFinalShelterDonateInput() { // --- Save Data Localy ---
 
-        // --- User data is OK than goto Next Step ---
-        DispatcherManager.getInstance().dispatchFinalShelterDonateInfo(dispatch, donateType, shelter, moneySum);
+        let [errorMessage, formIsOK] = validateDataConstraints()
+        let [errorMoneyMessage, isMoneyOk] = checkMoneySum()
 
-        // then call action next
-        if(formAction){
-            // --- svg animation ?
-            setTimeout(() => {
-                DispatcherManager.getInstance().dispatchFormAction(dispatch, ActionType.ACTION_NEXT, formAction.form_step);
-            }, 1000);
+        if (formIsOK && isMoneyOk) {
+
+            // --- User data is OK than goto Next Step ---
+            DispatcherManager.getInstance().dispatchFinalShelterDonateInfo(dispatch, donateType, ActiveUser, shelter, moneySum);
+
+            if (FormAction) { // ---> Go to STEP_2 ---
+                setTimeout(() => {
+                    DispatcherManager.getInstance().dispatchFormAction(dispatch, ActionType.ACTION_NEXT, FormAction.form_step)
+                }, 500);
+            }
+        } else {
+            if (errorMessage != "") {
+                setErrorMessage(errorMessage)
+            } else {
+                setErrorMessage("")
+            }
+    
+            if (errorMoneyMessage != "") {
+                setErrorMoneyMessage(errorMoneyMessage)
+            } else {
+                setErrorMoneyMessage("")
+            }
         }
     }
 
@@ -86,10 +105,12 @@ function ShelterDonateForm(props: DonateProps) {
         switch (type) {
             case DonateType.DONATE_SINGLE:
                 setDonateType(DonateType.DONATE_SINGLE);
+                setErrorMessage("")
                 break;
 
             case DonateType.DONATE_ALL:
                 setDonateType(DonateType.DONATE_ALL);
+                setErrorMessage("")
                 break;
 
             default: break;
@@ -99,12 +120,58 @@ function ShelterDonateForm(props: DonateProps) {
     // --- Data from DogAsylumListPicker child Component ---
     function setDataFromShelterListPicker(shelter: Shelter) {
         setShelter(shelter)
+        setErrorMessage("")
     }
 
     // --- Data from MoneyOptionDonate child Component ---
     function setDataFromMoneyOptionDonate(moneySum: number) {
-        console.log("QQQQQQQQQ MOney: ", moneySum)
         setMoneySum(moneySum)
+        setErrorMoneyMessage("")
+    }
+
+    function validateDataConstraints(): [string, boolean] {
+        let errorMessage = ""
+        let donateIsOk = false;
+
+        // --- Check if donate type is checked ---
+        switch (donateType) {
+            case DonateType.DONATE_SINGLE:
+                if (!shelter.name) {
+                    errorMessage = "Zabudli ste vybrat utulok, ktoremu chcete pomoct"
+                    donateIsOk = false
+                } else {
+                    donateIsOk = true;
+                }
+                break;
+
+            case DonateType.DONATE_ALL:
+                donateIsOk = true;
+                break;
+
+            case DonateType.DONATE_DEFAULT:
+                errorMessage = "Msite zvolit druh pomoci"
+                donateIsOk = false
+                break;
+
+            default: break;
+        }
+
+        return [errorMessage, donateIsOk]
+    }
+
+    function checkMoneySum(): [string, boolean] {
+        let errorMessage = ""
+        let donateIsOk = false;
+
+        // --- Check money ---
+        if (moneySum == 0) {
+            donateIsOk = false;
+            errorMessage = "Zabudli ste vybrat sumu prispevku"
+        } else {
+            donateIsOk = true;
+        }
+
+        return [errorMessage, donateIsOk]
     }
 }
 

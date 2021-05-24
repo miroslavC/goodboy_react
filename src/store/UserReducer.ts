@@ -8,11 +8,21 @@ export interface User {
     first_name: string;
     last_name: string;
     email: string;
-    phone_number: number;
+    phone_number: string;
     confirm_is_checked: boolean;
     donate_type: DonateType;
     donate_sum: number
     shelter: Shelter;
+}
+
+// * Only for Correct POST request () *
+export interface UserFinal {
+    firstName: string,
+    lastName: string,
+    email: string,
+    phone: string,
+    value: number,
+    shelterID: number
 }
 
 export interface Shelter {
@@ -33,11 +43,6 @@ export const UserReducer = (state: User | null = null, action: UserAction): User
     switch (action.type) {
         case USER_TYPE:
             return action.payload;
-
-            // return {
-            //     ...state,
-            //     ...action.payload
-            // };
 
         default:
             return state;

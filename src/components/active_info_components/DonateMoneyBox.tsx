@@ -1,6 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppState } from '../../store/AppState';
+import React, {useEffect, useState } from 'react';
 
 interface MoneyBoxProps {
     index: number;
@@ -12,8 +10,6 @@ interface MoneyBoxProps {
 function DonateMoneyBox(props: MoneyBoxProps) {
     const [donateStyle, setDonateStyle] = useState("option_donate_money_box")
     const [donateStyleValue, setDonateStyleValue] = useState("option_donate_money_box_value")
-
-    const user = useSelector((state: AppState) => state.user);
 
     useEffect(() => {
         if (!props.isActive) {

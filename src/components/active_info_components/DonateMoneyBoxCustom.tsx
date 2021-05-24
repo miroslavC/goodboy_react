@@ -30,7 +30,6 @@ function DonateMoneyBoxCustom(props: MoneyBoxProps) {
             setDonateStyleValue("option_donate_money_box_value_active")
             
             showMoneyPicker()
-         
         }
 
     }, [props.isActive]);

@@ -42,11 +42,15 @@ export default class ValidationHelper {
             }
         }
 
-        if (value.match(tempRegex)) {
-            func(false)
-            return true
+        if(value != undefined && value != null){
+            if (value.match(tempRegex)) {
+                func(false)
+                return true
+            } else {
+                func(true)
+                return false
+            }
         } else {
-            func(true)
             return false
         }
     }

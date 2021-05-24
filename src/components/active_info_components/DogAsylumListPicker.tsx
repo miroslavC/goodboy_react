@@ -15,12 +15,11 @@ function DogAsylumListPicker(props: DogAsylumListPickerProps) {
   const [shelterTemp, setShelterTemp] = useState({id:0, name: ""})
 
   const dispatch = useDispatch();
-  const user = useSelector((state: AppState) => state.user);
+  const ActiveUser = useSelector((state: AppState) => state.user);
 
     useEffect(() => {
-        console.log("DogAsylumList Init")
-        if(user && user.shelter){
-          setShelterTemp(user.shelter)
+        if(ActiveUser && ActiveUser.shelter){
+          setShelterTemp(ActiveUser.shelter)
         } 
      }, []);
 

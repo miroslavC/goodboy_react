@@ -6,13 +6,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import DispatcherManager from '../../store/DispatcherManager';
 import ValidationHelper, {InputType} from '../../util/ValidationHelper';
 
+enum StateFlag {
+    FLAG_SK,
+    FLAG_CZ
+  }
 
 interface UserFormProps {
    // TODO
 }
 
 type FormValues = {
-   
     firstName: string,
     lastName: string,
     email: string,
@@ -25,38 +28,42 @@ function UserForm(props: UserFormProps) {
     const [userLastName, setUserLastName] = useState("");
     const [email, setEmail] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
+    const [stateFlag, setStateFlag] = useState(StateFlag.FLAG_SK);
+
 
     // --- Form errors ---
     const [userFirstNameError, setUserFirstNameError] = useState(false);
     const [userLastNameError, setUserLastNameError] = useState(false);
     const [emailError, setEmailError] = useState(false);
     const [phoneNumberError, setPhoneNumberError] = useState(false);
+    const [formHasError, setFormError] = useState(false);
 
-    const formAction = useSelector((state: AppState) => state.form_action);
+    const FormAction = useSelector((state: AppState) => state.form_action);
+    const ActiveUser = useSelector((state: AppState) => state.user);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if(formAction){
-            switch (formAction.action_type) { // which setp is present 
-                case ActionType.ACTION_NEXT: 
-                    console.log("BBBBBB UserForm ACTION_NEXT")
-                    break;
-    
+        if(FormAction && FormAction.form_step == 2){
+            switch (FormAction.action_type) { // which setp is present 
                 case ActionType.ACTION_VALIDATE:
-                    console.log("BBBBBB UserForm ACTION_VALIDATE")
-                   // actionNextWithValidFromInput(formAction.form_step);
+                    actionNextWithValidFromInput(); // --- Final Validate ---
                     break;
-    
-                case ActionType.ACTION_BACK:
-                    break;
-    
+
                 default:
                     break;
-    
             }
         }
         
-    }, [formAction]);
+    }, [FormAction]);
+
+    useEffect(() => {
+        if(ActiveUser){
+            setUserFirstName(ActiveUser.first_name);
+            setUserLastName(ActiveUser.last_name)
+            setEmail(ActiveUser.email)
+            setPhoneNumber(ActiveUser.phone_number)
+        }
+    }, []);
 
     const onChangeFirstName = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const firstNameInput = e.target.value ? e.target.value : "";
@@ -93,26 +100,31 @@ function UserForm(props: UserFormProps) {
                     <form className="form_wrapper_child">
                         <div className="form_input_wrapper">
                             <p className="form_title">Meno</p>
-                            <input className="form_edit" type="text" {...register('firstName')} defaultValue="" placeholder="Zadajte Vaše meno" onChange={onChangeFirstName}/>
-                            {userFirstNameError &&  <p className="form_error">Vyplnené políčko pravdepodobne obsahuje chbybu :(</p>}
+                            <input className="form_edit" type="text" {...register('firstName')} defaultValue={ActiveUser? ActiveUser.first_name : ""} placeholder="Zadajte Vaše meno" onChange={onChangeFirstName}/>
+                            {userFirstNameError &&  <p className="form_error">Políčko pravdepodobne obsahuje chbybu :(</p>}
                         </div>
 
                         <div className="form_input_wrapper">
                             <p className="form_title">Priezvisko</p>
-                            <input className="form_edit" type="text" {...register('lastName')} defaultValue="" placeholder="Zadajte Vaše priezvisko" onChange={onChangeLastName}/>
-                            {userLastNameError &&  <p className="form_error">Vyplnené políčko pravdepodobne obsahuje chbybu :(</p>}
+                            <input className="form_edit" type="text" {...register('lastName')} defaultValue={ActiveUser? ActiveUser.last_name : ""} placeholder="Zadajte Vaše priezvisko" onChange={onChangeLastName}/>
+                            {userLastNameError &&  <p className="form_error">Políčko pravdepodobne obsahuje chbybu :(</p>}
                         </div>
 
                         <div className="form_input_wrapper">
                             <p className="form_title">E-mailová adresa</p>
-                            <input className="form_edit" type="email" {...register('email')} defaultValue="" placeholder="Zadajte Váš e-mail" onChange={onChangeEmail} />
+                            <input className="form_edit" type="email" {...register('email')} defaultValue={ActiveUser? ActiveUser.email : ""} placeholder="Zadajte Váš e-mail" onChange={onChangeEmail} />
                             {emailError &&  <p className="form_error">Mailová adresa obsahuje chybu(</p>}
                         </div>
 
                         <div className="form_input_wrapper">
                             <p className="form_title">Telefónne číslo</p>
-                            <input className="form_edit" type="tel" {...register('phoneNumber')} defaultValue="" placeholder="+421" onChange={onChangePhoneNumber} />
-                            {phoneNumberError &&  <p className="form_error">Chybné telefónne číslo(</p>}
+                            <div className="phone_state_flag_wrapper">
+                                <div className={stateFlag == StateFlag.FLAG_SK? "state_flag_sk" : "state_flag_cz"} onClick={changeFlagAction}></div>
+                                <div className={stateFlag == StateFlag.FLAG_SK? "state_phone_prefix_sk" : "state_phone_prefix"}>{stateFlag == StateFlag.FLAG_SK? "+421" : "+420"}</div>
+                                <input className="form_phone_edit" type="tel" {...register('phoneNumber')} defaultValue={ActiveUser ? ActiveUser.phone_number : ""} placeholder="" onChange={onChangePhoneNumber} />
+                                {phoneNumberError && <p className="form_error">Pravdepodobne nesprávny formát telefónneho čísla (správny formát: (+421)</p>}
+                            </div>
+
                         </div>
                     </form>
                 </div>
@@ -121,19 +133,14 @@ function UserForm(props: UserFormProps) {
         </>
     );
 
-    function actionNextWithValidFromInput(stepNumber: number) {
-        if (!ValidationHelper.getInstance().validateUserInput(userFirstName, InputType.NAME, validateUserFirstName)
-            || !ValidationHelper.getInstance().validateUserInput(userLastName, InputType.NAME, validateUserLastName)
-            || !ValidationHelper.getInstance().validateUserInput(email, InputType.EMAIL, validateUserMail)
-            || !ValidationHelper.getInstance().validateUserInput(phoneNumber, InputType.PHONE_NUMBER, validatePhoneNumber)) {
-
-            console.log("Stop formular obsahuje chybu")
+    function actionNextWithValidFromInput() {
+        if (isErrorInfinalDataValidation()) {
+            setFormError(true)
 
         } else {
-            console.log("OK can dispatch data")
-
-            // --- User data is OK than goto Next Step ---
-            DispatcherManager.getInstance().dispatchFormAction(dispatch, ActionType.ACTION_NEXT, stepNumber);
+            if (ActiveUser) { // --- Save User Data Locally ---
+                DispatcherManager.getInstance().dispatchUpdateUser(dispatch, ActiveUser, 0, userFirstName, userLastName, email, phoneNumber)
+            }
         }
     }
 
@@ -151,6 +158,44 @@ function UserForm(props: UserFormProps) {
 
     function validatePhoneNumber(isError: boolean): void {
         setPhoneNumberError(isError)
+    }
+
+    function isErrorInfinalDataValidation(): boolean {
+        let hasError = false;
+
+        if (!ValidationHelper.getInstance().validateUserInput(userFirstName, InputType.NAME, validateUserFirstName)) {
+            setUserFirstNameError(true)
+            hasError = true;
+        }
+
+        if (!ValidationHelper.getInstance().validateUserInput(userLastName, InputType.NAME, validateUserLastName)) {
+            setUserLastNameError(true)
+            hasError = true;
+        }
+
+        if (!ValidationHelper.getInstance().validateUserInput(email, InputType.EMAIL, validateUserMail)) {
+            setEmailError(true)
+            hasError = true;
+        }
+
+        if (!ValidationHelper.getInstance().validateUserInput(phoneNumber, InputType.PHONE_NUMBER, validatePhoneNumber)) {
+            setPhoneNumberError(true)
+            hasError = true;
+        }
+
+        return hasError;
+    }
+
+    function changeFlagAction() {
+        switch (stateFlag) {
+            case StateFlag.FLAG_SK:
+                setStateFlag(StateFlag.FLAG_CZ)
+                break;
+
+            case StateFlag.FLAG_CZ:
+                setStateFlag(StateFlag.FLAG_SK)
+                break;
+        }
     }
 }
 
