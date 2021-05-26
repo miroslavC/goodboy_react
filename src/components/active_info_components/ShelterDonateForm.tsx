@@ -7,22 +7,20 @@ import { User, Shelter, DonateType} from '../../store/UserReducer';
 import { ActionType} from '../../store/FormActionReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import DispatcherManager from '../../store/DispatcherManager';
+import ValidationHelper, {InputType} from '../../util/ValidationHelper';
+import { Snackbar } from '@material-ui/core';
+
 
 interface DonateProps {
     // TODO
  }
 
 function ShelterDonateForm(props: DonateProps) {
-    const [isActionBack, setActionBack] = useState(false);
-    const [isActionNext, setActionNext] = useState(false);
-    const [isActionSubmit, setActionSubmit] = useState(false);
     const [moneySum, setMoneySum] = useState(0);
+    const [isSnackBarOpen, setSnackBarOpen] = useState(false);
+    const [snackBarMessage, setSnackBarMessage] = useState("");
     const [donateType, setDonateType] = useState(DonateType.DONATE_DEFAULT);
     const [shelter, setShelter] = useState<Shelter>({id:0, name:""});  
-
-    const [errorMessage, setErrorMessage] = useState("");
-    const [errorMoneyMessage, setErrorMoneyMessage] = useState("");
-
     const FormAction = useSelector((state: AppState) => state.form_action);
     const dispatch = useDispatch();
     const ActiveUser = useSelector((state: AppState) => state.user);
@@ -52,28 +50,31 @@ function ShelterDonateForm(props: DonateProps) {
         }
         
     }, [FormAction]);
-  
+
     return (
         <>
-            {/* option toggle component (for shelter all/concrete)*/}
-            <HelpOptionToggle setDonateToggleOption={setDataFromHelpOptionToggle}/>
 
-            {/* list of shelters component*/}
-            <DogAsylumListPicker setShelterListData={setDataFromShelterListPicker}/>
+            <Snackbar open={isSnackBarOpen} message={snackBarMessage}/>
 
-            {/* money donate component */}
-            <MoneyOptionDonate setMoneyOptionData={setDataFromMoneyOptionDonate}/>
+            <div className="animate_slide_IN">
 
-            {errorMessage != "" && <div className="error_donate_wrapper"><p className="error_donate">{errorMessage}</p></div>}
-            {errorMoneyMessage != "" && <div className="error_donate_wrapper"><p className="error_donate">{errorMoneyMessage}</p></div>}
-    
+                {/* option toggle component (for shelter all/concrete)*/}
+                <HelpOptionToggle setDonateToggleOption={setDataFromHelpOptionToggle} />
+
+                {/* list of shelters component*/}
+                <DogAsylumListPicker setShelterListData={setDataFromShelterListPicker} />
+
+                {/* money donate component */}
+                <MoneyOptionDonate setMoneyOptionData={setDataFromMoneyOptionDonate} />
+
+            </div>
         </>
     );
 
     function validateFinalShelterDonateInput() { // --- Save Data Localy ---
 
-        let [errorMessage, formIsOK] = validateDataConstraints()
-        let [errorMoneyMessage, isMoneyOk] = checkMoneySum()
+        let [errorMessage, formIsOK] = ValidationHelper.getInstance().validateShelterDonateDataConstraints(shelter.name, donateType, null, null)
+        let [errorMoneyMessage, isMoneyOk] = ValidationHelper.getInstance().checkMoneySum(moneySum, null)
 
         if (formIsOK && isMoneyOk) {
 
@@ -83,20 +84,18 @@ function ShelterDonateForm(props: DonateProps) {
             if (FormAction) { // ---> Go to STEP_2 ---
                 setTimeout(() => {
                     DispatcherManager.getInstance().dispatchFormAction(dispatch, ActionType.ACTION_NEXT, FormAction.form_step)
-                }, 500);
+                }, 150);
             }
         } else {
             if (errorMessage != "") {
-                setErrorMessage(errorMessage)
-            } else {
-                setErrorMessage("")
-            }
+                setSnackBarMessage(errorMessage)
+            } 
     
             if (errorMoneyMessage != "") {
-                setErrorMoneyMessage(errorMoneyMessage)
-            } else {
-                setErrorMoneyMessage("")
-            }
+                setSnackBarMessage(errorMoneyMessage)
+            } 
+
+            setSnackBarOpen(true)
         }
     }
 
@@ -105,12 +104,10 @@ function ShelterDonateForm(props: DonateProps) {
         switch (type) {
             case DonateType.DONATE_SINGLE:
                 setDonateType(DonateType.DONATE_SINGLE);
-                setErrorMessage("")
                 break;
 
             case DonateType.DONATE_ALL:
                 setDonateType(DonateType.DONATE_ALL);
-                setErrorMessage("")
                 break;
 
             default: break;
@@ -120,58 +117,11 @@ function ShelterDonateForm(props: DonateProps) {
     // --- Data from DogAsylumListPicker child Component ---
     function setDataFromShelterListPicker(shelter: Shelter) {
         setShelter(shelter)
-        setErrorMessage("")
     }
 
     // --- Data from MoneyOptionDonate child Component ---
     function setDataFromMoneyOptionDonate(moneySum: number) {
         setMoneySum(moneySum)
-        setErrorMoneyMessage("")
-    }
-
-    function validateDataConstraints(): [string, boolean] {
-        let errorMessage = ""
-        let donateIsOk = false;
-
-        // --- Check if donate type is checked ---
-        switch (donateType) {
-            case DonateType.DONATE_SINGLE:
-                if (!shelter.name) {
-                    errorMessage = "Zabudli ste vybrat utulok, ktoremu chcete pomoct"
-                    donateIsOk = false
-                } else {
-                    donateIsOk = true;
-                }
-                break;
-
-            case DonateType.DONATE_ALL:
-                donateIsOk = true;
-                break;
-
-            case DonateType.DONATE_DEFAULT:
-                errorMessage = "Msite zvolit druh pomoci"
-                donateIsOk = false
-                break;
-
-            default: break;
-        }
-
-        return [errorMessage, donateIsOk]
-    }
-
-    function checkMoneySum(): [string, boolean] {
-        let errorMessage = ""
-        let donateIsOk = false;
-
-        // --- Check money ---
-        if (moneySum == 0) {
-            donateIsOk = false;
-            errorMessage = "Zabudli ste vybrat sumu prispevku"
-        } else {
-            donateIsOk = true;
-        }
-
-        return [errorMessage, donateIsOk]
     }
 }
 

@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/static/css/main.c22be9eb.chunk.css",
+    "main.js": "/static/js/main.cc97a610.chunk.js",
+    "main.js.map": "/static/js/main.cc97a610.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.a7543630.js",
+    "runtime-main.js.map": "/static/js/runtime-main.a7543630.js.map",
+    "static/js/2.78a4659b.chunk.js": "/static/js/2.78a4659b.chunk.js",
+    "static/js/2.78a4659b.chunk.js.map": "/static/js/2.78a4659b.chunk.js.map",
+    "static/js/3.1cd30cc6.chunk.js": "/static/js/3.1cd30cc6.chunk.js",
+    "static/js/3.1cd30cc6.chunk.js.map": "/static/js/3.1cd30cc6.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/main.c22be9eb.chunk.css.map": "/static/css/main.c22be9eb.chunk.css.map",
+    "static/js/2.78a4659b.chunk.js.LICENSE.txt": "/static/js/2.78a4659b.chunk.js.LICENSE.txt",
+    "static/media/App.css": "/static/media/wallet_selected.cccee58e.svg",
+    "static/media/dog.c468f694.png": "/static/media/dog.c468f694.png",
+    "static/media/pawn_splash.90416611.svg": "/static/media/pawn_splash.90416611.svg",
+    "static/media/step_indicator_1.13df3c3e.svg": "/static/media/step_indicator_1.13df3c3e.svg",
+    "static/media/step_indicator_2.1b6ea0bb.svg": "/static/media/step_indicator_2.1b6ea0bb.svg",
+    "static/media/step_indicator_3.2a5b5635.svg": "/static/media/step_indicator_3.2a5b5635.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a7543630.js",
+    "static/js/2.78a4659b.chunk.js",
+    "static/css/main.c22be9eb.chunk.css",
+    "static/js/main.cc97a610.chunk.js"
+  ]
+}

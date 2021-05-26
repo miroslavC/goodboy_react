@@ -1,10 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { isFunctionLike } from 'typescript';
 import DonateMoneyBox from "./DonateMoneyBox"
 import DonateMoneyBoxCustom from "./DonateMoneyBoxCustom"
 import { useDispatch, useSelector } from 'react-redux';
-import { DonateType } from '../../store/UserReducer';
-import DispatcherManager from '../../store/DispatcherManager';
 import { AppState } from '../../store/AppState';
 
 interface MoneyOptionDonateProps {
@@ -17,7 +14,6 @@ function MoneyOptionDonate(props: MoneyOptionDonateProps) {
     const [isUserActive, setUserActive] = useState(false);
 
     const ActiveUser = useSelector((state: AppState) => state.user);
-    const dispatch = useDispatch();
 
     useEffect(() => {
         console.log("MoneyOptionDonate Init")
@@ -28,7 +24,7 @@ function MoneyOptionDonate(props: MoneyOptionDonateProps) {
             setUserActive(true)
             setDonateSum(ActiveUser.donate_sum)
         }
-    }, [isUserActive]);
+    }, []);
 
     useEffect(() => {
          // --- send donateSum to parent Component ---
@@ -49,7 +45,7 @@ function MoneyOptionDonate(props: MoneyOptionDonateProps) {
                     <DonateMoneyBox index={5} isActive={isUserActive && donateSum == 100 || currentIndex == 5} moneySum={100} onChange={() => moneyBoxActiveAction(5)} />
 
                     <DonateMoneyBoxCustom index={6} 
-                                        moneyDonate={donateSum}
+                                        moneyDonate={isUserActive  && donateSum > 100? donateSum : 0}
                                         isActive={isUserActive && donateSum > 100 || currentIndex == 6} 
                                         onChange={() => moneyBoxActiveAction(6)} 
                                         setMoneyFromPicker={setMoneyFromMoneyPicker}/>

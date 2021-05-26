@@ -1,8 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { useDispatch, useSelector} from 'react-redux';
-import { DonateType } from '../../store/UserReducer';
-import DispatcherManager from '../../store/DispatcherManager';
-import { AppState } from '../../store/AppState';
+
 
 interface MoneyPickerProps {
     setSumOfMoney(sum: number): void
@@ -11,9 +8,6 @@ interface MoneyPickerProps {
 
 function MoneyPickerInput(props: MoneyPickerProps) {
     const [moneySum, setMoneySum] = useState(0);
-    const dispatch = useDispatch();
-
-    const user = useSelector((state: AppState) => state.user);
 
     useEffect(() => {
         console.log("MoneyPickerInput Init")

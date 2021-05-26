@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import DogAsylumList from "./DogAsylumList"
 import { useDispatch, useSelector } from 'react-redux';
-import DispatcherManager from '../../store/DispatcherManager';
 import { AppState } from '../../store/AppState';
 import { DonateType, Shelter} from '../../store/UserReducer';
 
@@ -14,7 +13,6 @@ function DogAsylumListPicker(props: DogAsylumListPickerProps) {
   const [shelterDefaultTitle, setShelterDefaultTitle] = useState("Vyberte útulok zo zoznamu")
   const [shelterTemp, setShelterTemp] = useState({id:0, name: ""})
 
-  const dispatch = useDispatch();
   const ActiveUser = useSelector((state: AppState) => state.user);
 
     useEffect(() => {

@@ -1,7 +1,4 @@
 import React, { useRef, useEffect, useState } from 'react';
-import HelpOptionToggle from "./active_info_components/HelpOptionToggle"
-import DogAsylumListPicker from "./active_info_components/DogAsylumListPicker"
-import MoneyOptionDonate from "./active_info_components/MoneyOptionDonate"
 import ActiveInfoAction from "./active_info_components/ActiveInfoAction"
 import UserForm from "./active_info_components/UserForm"
 import UserChceckFormInfo from "./active_info_components/UserChceckFormInfo"
@@ -10,22 +7,14 @@ import { AppState } from '../store/AppState';
 import { ActionType} from '../store/FormActionReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import DispatcherManager from '../store/DispatcherManager';
-
+import step_indicator_1 from '../assets//images/step_indicator_1.svg';
+import step_indicator_2 from '../assets//images/step_indicator_2.svg';
+import step_indicator_3 from '../assets//images/step_indicator_3.svg';
 
 function PageActiveInfoSection() {
     const [formStepNumber, setFormStepNumber] = useState(0);
-    const [screenDonateIsActive, setScreenDonateActive] = useState(false);
-    const [screenUserFormIsActive, setScreenUserFormActive] = useState(false);
-    const [screenFormCheckIsActive, setScreenFormCheckActive] = useState(false);
-    const [isFinalConfirmCheck, setFinalConfirmCheck] = useState(false);
-
     const FormAction = useSelector((state: AppState) => state.form_action);
-    const ActiveUser = useSelector((state: AppState) => state.user);
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        console.log("XXXXXX Init")
-     }, [screenDonateIsActive, screenUserFormIsActive, screenFormCheckIsActive]);
   
     useEffect(() => {
         console.log("PageActiveInfoSection Init")
@@ -38,6 +27,12 @@ function PageActiveInfoSection() {
         return (
             <>
                 <div className="active_info_wrapper">
+
+                    <div className="space_indicator">
+                        {FormAction.form_step == 1 && <img className="indicator_img" src={step_indicator_1} alt="Logo" />}
+                        {FormAction.form_step == 2 && <img className="indicator_img" src={step_indicator_2} alt="Logo" />}
+                        {FormAction.form_step == 3 && <img className="indicator_img" src={step_indicator_3} alt="Logo" />}
+                    </div>
 
                     {/* (STEP_1) donate for shelter with options */}
                     {FormAction.form_step == 1 && <ShelterDonateForm/>}
@@ -76,11 +71,6 @@ function PageActiveInfoSection() {
                 // --- validate in STEP_2 ---
                 DispatcherManager.getInstance().dispatchFormAction(dispatch, ActionType.ACTION_VALIDATE, formStepNumber);
 
-                if (FormAction) { // ---> Go to STEP_3 ---
-                    setTimeout(() => {
-                        DispatcherManager.getInstance().dispatchFormAction(dispatch, ActionType.ACTION_NEXT, FormAction.form_step)
-                    }, 500);
-                }
                 break;
 
             default:

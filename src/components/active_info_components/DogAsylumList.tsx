@@ -1,8 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { DonateType, Shelter} from '../../store/UserReducer';
-import DispatcherManager from '../../store/DispatcherManager';
-import { AppState } from '../../store/AppState';
 import {UserHttpApi} from "../../api/UserHttpApi";
 
 
@@ -14,8 +11,6 @@ interface ShelterPickerProps {
 function DogAsylumList(props: ShelterPickerProps) {
     const [shelterList, setShelterList] = useState<Shelter[]>([]);
     const [httpError, setHttpError] = useState(false);
-    const dispatch = useDispatch();
-    const user = useSelector((state: AppState) => state.user);
 
     // --- Http GetRequest call ---
     useEffect(() => {
